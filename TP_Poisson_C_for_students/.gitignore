@@ -1,0 +1,6 @@
+*.dat
+*.o
+*.DS_Store
+.vscode
+*.tar.gz
+
