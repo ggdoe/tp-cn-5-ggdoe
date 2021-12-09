@@ -6,8 +6,27 @@
 #include "lib_poisson1D.h"
 
 void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la){
+  int ii;
 
-  //TODO
+      // TODO : à complété éventuellement
+  // for(jj = 0; jj < *lab; jj++){
+  //   // fill 0 begin
+  //   // fill row
+  //   // fill 0 end
+  // }
+
+  AB[0] = 0.0; // first element is null
+  for(ii = 1; ii < *la; ii++){
+    AB[ii] = -1;
+  }
+  for(ii = 0; ii < *la; ii++){
+    AB[(*la) + ii] = 2;
+  }
+  for(ii = 0; ii < *la-1; ii++){
+    AB[2* (*la) + ii] = -1;
+  }
+  AB[3* (*la)-1] = 0.0; // last elemnt is null
+  
 }
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
   int ii, jj, kk;
