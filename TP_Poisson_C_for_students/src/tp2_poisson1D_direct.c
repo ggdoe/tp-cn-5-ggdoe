@@ -89,7 +89,7 @@ int main(int argc,char *argv[])
 
   kv = 0; // blas ne prend pas de 0 de padding
   set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
-  set_analytical_solution_DBC_1D(EX_SOL, X, &la, &T0, &T1); // EX_SOL solution exacte avec 'la' points
+  set_analytical_solution_DBC_1D(EX_SOL, X, &la, &T0, &T1); // TODO : remplacer par une copie de EX_SOL plus haut
   // set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
 
   cblas_dgbmv(CblasColMajor, CblasNoTrans, la, la, kl, ku, 1, AB, lab, EX_SOL, 1, 0, y, 1);

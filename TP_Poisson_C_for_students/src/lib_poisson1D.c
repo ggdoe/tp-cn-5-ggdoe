@@ -189,3 +189,13 @@ double richardson_alpha_opt(int *la){
 void richardson_alpha(double *AB, double *RHS, double *X, double *alpha_rich, int *lab, int *la,int *ku, int*kl, double *tol, int *maxit){
   //TODO
 }
+
+void mylu_tridiag(double *AB, int *lab, int *la){
+  double *d, *e;
+  // AB = [0 c1 .. cn-1 d1 .. dn e1 .. en-1]
+  for(int k = 0; k < *la - 1; k++){
+    AB[k + 1] /= AB[(*la) + k];
+    //voir cahier de notes brouillon
+    
+  }
+}
