@@ -1,5 +1,7 @@
 /******************************************/
-/* tp2_dgbmv.c                 */
+/* tp2_poisson1D_direct.c                 */
+/* This file contains the main function   */
+/* to solve the Poisson 1D problem        */
 /******************************************/
 #include "lib_poisson1D.h"
 int main(int argc,char *argv[])

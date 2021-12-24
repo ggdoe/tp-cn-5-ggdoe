@@ -184,12 +184,45 @@ void richardson_alpha(double *AB, double *RHS, double *X, double *alpha_rich, in
   //TODO
 }
 
-void mylu_tridiag(double *AB, int *lab, int *la){
-  double *d, *e;
-  // AB = [0 c1 .. cn-1 d1 .. dn e1 .. en-1]
+void myluB_RowMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
+  LB[0] = 1;
+  for(int k = 1; k < *la; k++){
+    UB[k] = -1;
+    LB[k] = 1;
+  }
+  UB[*la] = 2;
   for(int k = 0; k < *la - 1; k++){
-    AB[k + 1] /= AB[(*la) + k];
-    //voir cahier de notes brouillon
-    
+    const double inv_un = 1/UB[*la + k];
+    LB[*la + k] = -inv_un;
+    UB[*la + k + 1] = 2 - inv_un;
+  }
+}
+
+void myluB_ColMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
+  UB[1] = 2;   // on n'initialise pas les *
+  for(int k = 1; k < *la; k++){
+    UB[2*k] = -1;
+    LB[2*(k-1)] = 1;
+    const double inv_un = 1/UB[2*k-1];
+    UB[2*k+1] = 2 - inv_un;
+    LB[2*k-1] = -inv_un; // on décale les indices pour profiter de inv_un
+  }
+  LB[2 * (*la-1)] = 1;
+}
+
+void mylu_poisson1D(double *A, int *la, double *L, double *U){
+  // L et U doivent etre initialiser à 0 avec calloc.
+  for(int i = 0; i < *la; i++){
+    L[i * (*la) + i] = 1;
+  }
+  for(int i = 0; i < *la-1; i++){
+    U[i * (*la) + i + 1] = -1;
+  }
+
+  U[0] = 2;
+  for(int i = 0; i < *la - 1; i++){
+    const double inv_un = U[i * (*la) + i];
+    U[(i+1) * (*la) + i + 1] = 2 - inv_un;
+    L[(i+1) * (*la) + i] = -inv_un;
   }
 }
