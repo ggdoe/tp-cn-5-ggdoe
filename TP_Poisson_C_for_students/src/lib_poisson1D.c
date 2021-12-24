@@ -5,29 +5,23 @@
 /**********************************************/
 #include "lib_poisson1D.h"
 
-void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la){
+void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
   int ii;
 
-      // TODO : à complété éventuellement
-  // for(jj = 0; jj < *lab; jj++){
-  //   // fill 0 begin
-  //   // fill row
-  //   // fill 0 end
-  // }
+  const int v = (*kv) * (*la); // nbr lignes laissée vide
+  const int n = *la; // les premiers elements ne sont pas set
 
-  const int n = *la; // les premiers element ne sont pas set
-
-  // AB[0] = 0.0; // first element is null
+  // on n'a pas besoin d'initialiser les premiers éléments *
   for(ii = 1; ii < n; ii++){
-    AB[n + ii] = -1;
+    AB[v + ii] = -1;
   }
   for(ii = 0; ii < n; ii++){
-    AB[2*n + ii] = 2;
+    AB[v + n + ii] = 2;
   }
   for(ii = 0; ii < n-1; ii++){
-    AB[3*n + ii] = -1;
+    AB[v + 2*n + ii] = -1;
   }
-  // AB[3* (*la)-1] = 0.0; // last elemnt is null
+  // on n'a pas besoin d'initialiser les derniers éléments *
 }
 
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){

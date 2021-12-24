@@ -23,6 +23,7 @@ int main(int argc,char *argv[])
 
   NRHS=1;
   nbpoints=102;
+  // nbpoints=999;
   la=nbpoints-2;
   T0=-5.0;
   T1=5.0;
@@ -55,7 +56,7 @@ int main(int argc,char *argv[])
   int row = 1;
 
   if (row == 1){ // LAPACK_ROW_MAJOR
-    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la); // TODO
+    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la, &kv); // TODO
     // write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
     
     info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, ku, NRHS, AB, la, ipiv, RHS, NRHS);
@@ -67,6 +68,8 @@ int main(int argc,char *argv[])
     info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,la, kl, ku, NRHS, AB, lab, ipiv, RHS, la);
   }    
 
+  // for(int i=0; i< la; i++)
+  //   printf("%d ", ipiv[i]);
 
   printf("\n INFO DGBSV = %d\n",info);
 
@@ -82,6 +85,8 @@ int main(int argc,char *argv[])
   
   printf("\n\nThe relative residual error is relres = %e\n",relres);
 
+
+/* déplacé vers tp2_dgbmv.c
 ///////////////////// ex.4
   printf("\n------ DGBMV ------");
   double *y;
@@ -104,12 +109,12 @@ int main(int argc,char *argv[])
 //     printf("%.4f ", RHS[i]);
 
   /* Relative residual */
-  temp = cblas_ddot(la, RHS, 1, RHS,1);
-  cblas_daxpy(la, -1.0, RHS, 1, y, 1);
-  relres = cblas_ddot(la, y, 1, y,1);
-  relres = sqrt(relres / temp);
+  // temp = cblas_ddot(la, RHS, 1, RHS,1);
+  // cblas_daxpy(la, -1.0, RHS, 1, y, 1);
+  // relres = cblas_ddot(la, y, 1, y,1);
+  // relres = sqrt(relres / temp);
 
-  printf("\nThe relative residual error is relres = %e\n",relres);
+  // printf("\nThe relative residual error is relres = %e\n",relres);
 
 ////////////////////// end ex.4
 
@@ -119,7 +124,7 @@ int main(int argc,char *argv[])
   free(X);
   free(AB);
   free(ipiv);
-  free(y);
+  // free(y);
 
   printf("\n\n--------- End -----------\n");
 }
