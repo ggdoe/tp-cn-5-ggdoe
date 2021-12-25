@@ -15,12 +15,13 @@ int main(int argc,char *argv[])
   double *RHS, *EX_SOL, *X;
   double *AB;
   double *y;
-
   double temp, relres;
+  clock_t begin, end;
+  const int nbr_rep = 10000;
 
   NRHS=1;
-  nbpoints=102;
-  // nbpoints=999;
+  // nbpoints=102;
+  nbpoints=10000;
   la=nbpoints-2;
   T0=-5.0;
   T1=5.0;
@@ -53,7 +54,12 @@ int main(int argc,char *argv[])
   write_vec(EX_SOL, &la, "EX_SOL.dat");
   write_vec(X, &la, "X_grid.dat");
 
-  cblas_dgbmv(CblasColMajor, CblasNoTrans, la, la, kl, ku, 1, AB, lab, EX_SOL, 1, 0, y, 1);
+  begin = clock(); 
+  for(int i = 0; i < nbr_rep; i++)
+    cblas_dgbmv(CblasColMajor, CblasNoTrans, la, la, kl, ku, 1, AB, lab, EX_SOL, 1, 0, y, 1);// y est nul
+  end = clock(); 
+
+  // rowMajor ne fonctionne tjr pas
   // cblas_dgbmv(CblasRowMajor, CblasNoTrans, la, la, kl, ku, 1, AB, la, EX_SOL, 1, 0, y, 1);
   
   // for(int i = 0; i < la; i++)
@@ -63,14 +69,15 @@ int main(int argc,char *argv[])
 //   for(int i = 0; i < la; i++)
 //     printf("%.4f ", RHS[i]);
 
-  /* Relative residual */
+  /* Relative residual */ 
   temp = cblas_ddot(la, RHS, 1, RHS,1);
   cblas_daxpy(la, -1.0, RHS, 1, y, 1);
   relres = cblas_ddot(la, y, 1, y,1);
   relres = sqrt(relres / temp);
 
   printf("\nThe relative residual error is relres = %e\n",relres);
-
+  unsigned long micros = (end -  begin) * 10e6 / CLOCKS_PER_SEC / nbr_rep;
+  printf("\n\nTime mesure = %ld µs\n",micros);
 ////////////////////// end ex.4
 
 

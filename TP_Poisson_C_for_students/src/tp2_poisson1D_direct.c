@@ -18,12 +18,13 @@ int main(int argc,char *argv[])
   double T0, T1;
   double *RHS, *EX_SOL, *X;
   double *AB;
-
   double temp, relres;
+  clock_t begin, end;
+  const int nbr_rep = 1000;
 
   NRHS=1;
   nbpoints=102;
-  // nbpoints=999;
+  // nbpoints=1500; 
   la=nbpoints-2;
   T0=-5.0;
   T1=5.0;
@@ -53,21 +54,25 @@ int main(int argc,char *argv[])
   /* working array for pivot used by LU Factorization */
   ipiv = (int *) calloc(la, sizeof(int));
 
-  int row = 1;
+  int row = 0; 
+  begin = clock(); 
+  for(int i = 0; i < nbr_rep; i++){
+    set_dense_RHS_DBC_1D(RHS,&la,&T0,&T1); // RHS = (T0, 0, 0, ..., 0, T1)
 
-  if (row == 1){ // LAPACK_ROW_MAJOR
-    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la, &kv); // TODO
-    // write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
-    
-    info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, ku, NRHS, AB, la, ipiv, RHS, NRHS);
-  } 
-  else { // LAPACK_COL_MAJOR
-    set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
-    // write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
+    if (row == 1){ // LAPACK_ROW_MAJOR
+      set_GB_operator_rowMajor_poisson1D(AB, &lab, &la, &kv); // TODO
+      // write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
+      
+      info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, ku, NRHS, AB, la, ipiv, RHS, NRHS);
+    } 
+    else { // LAPACK_COL_MAJOR
+      set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
+      // write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
 
-    info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,la, kl, ku, NRHS, AB, lab, ipiv, RHS, la);
-  }    
-
+      info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,la, kl, ku, NRHS, AB, lab, ipiv, RHS, la);
+    }
+  }
+  end = clock();
   // for(int i=0; i< la; i++)
   //   printf("%d ", ipiv[i]);
 
@@ -84,6 +89,8 @@ int main(int argc,char *argv[])
   relres = relres / temp;
   
   printf("\n\nThe relative residual error is relres = %e\n",relres);
+  unsigned long micros = (end -  begin) * 10e6 / CLOCKS_PER_SEC / nbr_rep;
+  printf("\n\nTime mesure = %ld µs\n",micros);
 
 
 /* déplacé vers tp2_dgbmv.c

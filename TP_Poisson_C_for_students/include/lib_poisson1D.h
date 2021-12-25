@@ -8,6 +8,7 @@
 #include <math.h>
 #include <float.h>
 #include <limits.h>
+#include <time.h>
 #include "blaslapack_headers.h"
 
 void set_GB_operator_rowMajor_poisson1D(double* AB, int* lab, int *la, int *kv);
@@ -26,6 +27,7 @@ double eigmin_poisson1D(int *la);
 double richardson_alpha_opt(int *la);
 void richardson_alpha(double *AB, double *RHS, double *X, double *alpha_rich, int *lab, int *la,int *ku, int*kl, double *tol, int *maxit);
 
-void myluB_RowMajor_poisson1D(double *AB, int *la, double *LB, double *UB);
-void myluB_ColMajor_poisson1D(double *AB, int *la, double *LB, double *UB);
-void mylu_poisson1D(double *A, int *la, double *L, double *U);
+void myluB_rowMajor_poisson1D(double *LB, double *UB, int *la);
+void myluB_colMajor_poisson1D(double *LB, double *UB, int *la);
+void mylu_rowMajor_poisson1D(double *L, double *U, int *la);
+void set_GE_rowMajor_operator_poisson1D(double* A, int *la);

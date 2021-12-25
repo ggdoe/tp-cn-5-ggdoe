@@ -36,10 +36,11 @@ INCL= -I $(TPDIR)/include $(INCLBLASLAPACK)
 OBJENV= tp_env.o
 OBJTP2ITER= lib_poisson1D.o tp2_poisson1D_iter.o
 OBJTP2DGBMV= lib_poisson1D.o tp2_dgbmv.o
+OBJTP2LU= lib_poisson1D.o tp2_poisson1D_lu.o
 OBJTP2DIRECT= lib_poisson1D.o tp2_poisson1D_direct.o
 #
 
-all: bin/tp_testenv bin/tp2poisson1D_iter bin/tp2_dgbmv bin/tp2poisson1D_direct
+all: bin/tp_testenv bin/tp2poisson1D_iter bin/tp2_dgbmv bin/tp2poisson1D_direct bin/tp2_poisson1D_lu
 
 testenv: bin/tp_testenv
 
@@ -59,6 +60,9 @@ tp2_poisson1D_iter.o: $(TPDIRSRC)/tp2_poisson1D_iter.c
 tp2_dgbmv.o: $(TPDIRSRC)/tp2_dgbmv.c
 	$(CC) $(OPTC) -c $(INCL) $(TPDIRSRC)/tp2_dgbmv.c  
 
+tp2_poisson1D_lu.o: $(TPDIRSRC)/tp2_poisson1D_lu.c
+	$(CC) $(OPTC) -c $(INCL) $(TPDIRSRC)/tp2_poisson1D_lu.c  
+
 tp2_poisson1D_direct.o: $(TPDIRSRC)/tp2_poisson1D_direct.c
 	$(CC) $(OPTC) -c $(INCL) $(TPDIRSRC)/tp2_poisson1D_direct.c  
 
@@ -71,6 +75,9 @@ bin/tp2poisson1D_iter: $(OBJTP2ITER)
 bin/tp2_dgbmv: $(OBJTP2DGBMV)
 	$(CC) -o bin/tp2_dgbmv $(OPTC) $(OBJTP2DGBMV) $(LIBS)
 
+bin/tp2_poisson1D_lu: $(OBJTP2LU)
+	$(CC) -o bin/tp2_poisson1D_lu $(OPTC) $(OBJTP2LU) $(LIBS)
+
 bin/tp2poisson1D_direct: $(OBJTP2DIRECT)
 	$(CC) -o bin/tp2poisson1D_direct $(OPTC) $(OBJTP2DIRECT) $(LIBS)
 
@@ -82,6 +89,9 @@ run_tp2poisson1D_iter:
 	
 run_tp2_dgbmv:
 	bin/tp2_dgbmv
+
+run_tp2_poisson1D_lu:
+	bin/tp2_poisson1D_lu
 
 run_tp2poisson1D_direct:
 	bin/tp2poisson1D_direct

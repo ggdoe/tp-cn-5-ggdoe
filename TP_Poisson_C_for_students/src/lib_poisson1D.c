@@ -184,7 +184,7 @@ void richardson_alpha(double *AB, double *RHS, double *X, double *alpha_rich, in
   //TODO
 }
 
-void myluB_RowMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
+void myluB_rowMajor_poisson1D(double *LB, double *UB, int *la){
   LB[0] = 1;
   for(int k = 1; k < *la; k++){
     UB[k] = -1;
@@ -198,7 +198,7 @@ void myluB_RowMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
   }
 }
 
-void myluB_ColMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
+void myluB_colMajor_poisson1D(double *LB, double *UB, int *la){
   UB[1] = 2;   // on n'initialise pas les *
   for(int k = 1; k < *la; k++){
     UB[2*k] = -1;
@@ -210,7 +210,7 @@ void myluB_ColMajor_poisson1D(double *AB, int *la, double *LB, double *UB){
   LB[2 * (*la-1)] = 1;
 }
 
-void mylu_poisson1D(double *A, int *la, double *L, double *U){
+void mylu_rowMajor_poisson1D(double *L, double *U, int *la){
   // L et U doivent etre initialiser à 0 avec calloc.
   for(int i = 0; i < *la; i++){
     L[i * (*la) + i] = 1;
@@ -221,8 +221,18 @@ void mylu_poisson1D(double *A, int *la, double *L, double *U){
 
   U[0] = 2;
   for(int i = 0; i < *la - 1; i++){
-    const double inv_un = U[i * (*la) + i];
+    const double inv_un = 1/U[i * (*la) + i];
     U[(i+1) * (*la) + i + 1] = 2 - inv_un;
     L[(i+1) * (*la) + i] = -inv_un;
+  }
+}
+
+void set_GE_rowMajor_operator_poisson1D(double* A, int *la){
+  // A doit etre initialiser à 0 avec calloc.
+  A[0] = 2;
+  for(int i = 1; i < *la; i++){
+    A[(i-1) * (*la) + i] = -1;
+    A[i * (*la) + i] = 2;
+    A[i * (*la) + i - 1] = -1;
   }
 }
