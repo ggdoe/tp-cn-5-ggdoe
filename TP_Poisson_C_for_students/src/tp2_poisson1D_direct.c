@@ -92,46 +92,11 @@ int main(int argc,char *argv[])
   unsigned long micros = (end -  begin) * 10e6 / CLOCKS_PER_SEC / nbr_rep;
   printf("\n\nTime mesure = %ld µs\n",micros);
 
-
-/* déplacé vers tp2_dgbmv.c
-///////////////////// ex.4
-  printf("\n------ DGBMV ------");
-  double *y;
-  y = (double *) calloc(la, sizeof(double));
-
-  kv = 0; // blas ne prend pas de 0 de padding
-  set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
-  set_analytical_solution_DBC_1D(EX_SOL, X, &la, &T0, &T1); // TODO : remplacer par une copie de EX_SOL plus haut
-  // set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
-
-  cblas_dgbmv(CblasColMajor, CblasNoTrans, la, la, kl, ku, 1, AB, lab, EX_SOL, 1, 0, y, 1);
-
-  // for(int i = 0; i < la; i++)
-  //   printf("%.0f ", y[i]);
-
- 
-  set_dense_RHS_DBC_1D(RHS,&la,&T0,&T1); // RHS = (T0, 0, 0, ..., 0, T1)
-//  printf("\n");
-//   for(int i = 0; i < la; i++)
-//     printf("%.4f ", RHS[i]);
-
-  /* Relative residual */
-  // temp = cblas_ddot(la, RHS, 1, RHS,1);
-  // cblas_daxpy(la, -1.0, RHS, 1, y, 1);
-  // relres = cblas_ddot(la, y, 1, y,1);
-  // relres = sqrt(relres / temp);
-
-  // printf("\nThe relative residual error is relres = %e\n",relres);
-
-////////////////////// end ex.4
-
-
   free(RHS);
   free(EX_SOL);
   free(X);
   free(AB);
   free(ipiv);
-  // free(y);
 
   printf("\n\n--------- End -----------\n");
 }
