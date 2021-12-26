@@ -19,7 +19,7 @@ function [err] = richardson_poisson1D(n, nbr_it, alpha)
 endfunction
 
 function [] = plot_richardson(n, nbr_it)
-    alpha = [0.02 0.05 0.1 0.15 0.25 0.35 0.45 0.50 0.5+2/nbr_it]
+    alpha = [0.02 0.05 0.1 0.15 0.25 0.35 0.45 0.50 0.5+3*10e-5]
     f = scf();
     f.color_map = rainbowcolormap(32);
     
@@ -28,7 +28,7 @@ function [] = plot_richardson(n, nbr_it)
         plot2d(1:nbr_it, err, style=3*i, leg=string(alpha(i)))
     end
     //title("Temps d`exécution dgbsv")
-    legend("alpha = " + string(alpha), opt=3)
+    legend("$\alpha = " + string(alpha)+"$", opt=1)
     xlabel("nombre itération")
     ylabel("erreur relative")
 endfunction

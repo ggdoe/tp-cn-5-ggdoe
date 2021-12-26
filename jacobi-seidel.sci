@@ -48,13 +48,13 @@ function [] = plot_jac_seid(n, nbr_it)
     plot2d(1:nbr_it, err, style=15, leg="Gauss-Seidel")
     
     //title("Temps d`exécution dgbsv")
-    legend(["Jacobi" "Gauss-Seidel"], opt=3)
+    legend(["Jacobi" "Gauss-Seidel"], opt=1)
     xlabel("nombre itération")
     ylabel("erreur relative")
 endfunction
 
 function [] = time_jac_seid()
-    n = [10 20 30 40 50 60 70 80 90 100 120 140 160 180 200]
+    n = [10 20 30 40 50 60 70 80 90 100 120 140 160 180 200 250 300 400]
     size_n = size(n)(2)
     f = scf(1); f.color_map = rainbowcolormap(32);
     time_j = zeros(size(n)(2),1)
@@ -88,12 +88,14 @@ function [] = time_jac_seid()
     end
     time_j = time_j / nbr_rep
     time_gs = time_gs / nbr_rep
-    plot2d(n, time_j, style=1, leg="Jacobi")
-    plot2d(n, time_gs, style=15, leg="Gauss-Seidel")
+    loglog(n, time_j, "r")
+    loglog(n, time_gs, "g")
+    //plot(n, time_j, style=1, leg="Jacobi")
+    //plot(n, time_gs, style=15, leg="Gauss-Seidel")
     
     //title("Temps d`exécution dgbsv")
-    legend(["Jacobi" "Gauss-Seidel"], opt=1)
-    xlabel("nombre itération")
+    legend(["Jacobi" "Gauss-Seidel"], opt=2)
+    xlabel("n")
     ylabel("Temps d`éxécution (s)")
 endfunction
 
