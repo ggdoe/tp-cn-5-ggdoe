@@ -120,15 +120,7 @@ int main(int argc,char *argv[])
   printf("The relative residual error is relres = %e",relres);
   micros = (end -  begin) * 10e6 / CLOCKS_PER_SEC / nbr_rep;
   printf("\n\nTime mesure = %ld µs\n",micros);
-// LAPACKE_dlansy // SY
-
-// cblas_dswap()
-  // cblas_dgemm(); // LU-A
-  // cblas_dgemm(); // ||LU-A||
-  // cblas_dgemm(); // ||A||
   
-  
-
   free(RHS);
   free(EX_SOL);
   free(X);
